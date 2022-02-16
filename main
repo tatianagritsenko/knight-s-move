@@ -1,0 +1,138 @@
+#include <iostream>
+using namespace std;
+
+const int f = 8;
+
+int caseh(int i, int j, int(&a)[f][f]) // проверка, возможен ли ход
+{
+	if (i < 0 or i > 7 or j < 0 or j > 7 or a[i][j] != 0)
+		return 0; // ход невозможен
+	else
+		return 1; // ход возможен
+}
+
+int tryy(int i, int j, int(&a)[f][f], int n)
+{
+	a[i][j] = n;
+
+	if (n == 64)
+		return 1; // задача решена
+
+	n++;
+
+	if (caseh(i - 2, j + 1, a))
+	{
+		if (tryy(i - 2, j + 1, a, n))
+			return 1;
+	}
+		
+	if (caseh(i - 1, j + 2, a))
+	{
+		if (tryy(i - 1, j + 2, a, n))
+			return 1;
+	}
+		
+	if (caseh(i + 1, j + 2, a))
+	{
+		if (tryy(i + 1, j + 2, a, n))
+			return 1;
+	}
+			
+	if (caseh(i + 2, j + 1, a))
+	{
+		if (tryy(i + 2, j + 1, a, n))
+			return 1;
+	}
+		
+
+	if (caseh(i + 2, j - 1, a))
+	{
+		if (tryy(i + 2, j - 1, a, n))
+			return 1;
+	}
+
+	if (caseh(i + 1, j - 2, a))
+	{
+		if (tryy(i + 1, j - 2, a, n))
+			return 1;
+	}
+
+
+	if (caseh(i - 1, j - 2, a))
+	{
+		if (tryy(i - 1, j - 2, a, n))
+			return 1;
+	}
+	
+
+	if (caseh(i - 2, j - 1, a))
+	{
+		if (tryy(i - 2, j - 1, a, n))
+			return 1;
+	}
+
+	a[i][j] = 0;
+	n--;
+	return 0; // ход невозможен
+}
+
+int main()
+{
+	setlocale(LC_ALL, "ru");
+	int a[f][f];
+
+	for (int u = 0; u < f; u++)
+		for (int v = 0; v < f; v++)
+			a[u][v] = 0;
+
+	int t; // 1<=t<=8
+	int k; // 1<=k<=8
+
+	cout << "Начальная позиция:" << endl;
+	
+	while (true)
+	{
+		cout << "Строка - ";
+		cin >> t;
+		if (cin.fail() or t < 1 or t > 8)
+		{
+			cout << "Ошибка! Введите число от 1 до 8" << endl;
+			cin.clear(); cin.ignore(1000, '\n');
+		}
+		else
+			break;
+	}
+	while (true)
+	{
+		cout << "Столбец - ";
+		cin >> k;
+		if (cin.fail() or k < 1 or k > 8)
+		{
+			cout << "Ошибка! Введите число от 1 до 8" << endl;
+			cin.clear(); cin.ignore(1000, '\n');
+		}
+		else
+			break;
+	}
+
+	// индексы
+	int i = t - 1; // 0<=i<=7
+	int j = k - 1; // 0<=j<=7
+
+	int n = 1; // 1<=n<=64
+
+
+	tryy(i, j, a, n);
+
+	cout << "__________________________________________________________" << endl << endl;
+
+	for (int u = 0; u < f; u++)
+	{
+		for (int v = 0; v < f; v++)
+			cout << a[u][v] << '\t';
+
+		cout << endl;
+		cout << "__________________________________________________________" << endl << endl;
+	}
+	
+}
